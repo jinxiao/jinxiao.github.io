@@ -54,7 +54,7 @@
 <meta property="og:site_name" content="Gary的Blog">
 <meta property="og:description" content="阿里云ubuntu主机docker无法自启动的问题排查最近在使用阿里云ubuntu 的镜像来给公司创建主机，但是发现一个很明显的问题，安装Docker 之后无法随开机启动，一直失败。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-12-07T08:25:15.113Z">
+<meta property="og:updated_time" content="2019-12-08T09:10:57.428Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://garyjin.com/2019/12/07/aliyun-docker-systemd-cannot-boot/">
@@ -201,9 +201,26 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2019-12-07 15:48:28 / 修改时间：16:25:15" itemprop="dateCreated datePublished" datetime="2019-12-07T15:48:28+08:00">2019-12-07</time>
+              <time title="创建时间：2019-12-07 15:48:28" itemprop="dateCreated datePublished" datetime="2019-12-07T15:48:28+08:00">2019-12-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-08 17:10:57" itemprop="dateModified" datetime="2019-12-08T17:10:57+08:00">2019-12-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Docker/" itemprop="url" rel="index">
+                    <span itemprop="name">Docker</span>
+                  </a>
+                </span>
             </span>
 
           
@@ -221,6 +238,7 @@
 <a id="more"></a>
 <h2 id="问题排查"><a href="#问题排查" class="headerlink" title="问题排查"></a>问题排查</h2><p>使用<code>systemctl</code> 直接查看<code>Docker</code> 的<code>service</code> 看到的情况其实很简单，我们先来看下<code>docker.service</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=Docker Application Container Engine</span><br><span class="line">Documentation=https://docs.docker.com</span><br><span class="line">BindsTo=containerd.service</span><br><span class="line">After=network-online.target firewalld.service containerd.service</span><br><span class="line">Wants=network-online.target</span><br><span class="line">Requires=docker.socket</span><br></pre></td></tr></table></figure>
+
 <p>我们可以明显的看到<code>docker.service</code> 依赖于<code>network-online.target</code> ，然后我们使用<code>systemctl</code> 查看的时候发现一个已经failed的服务恰巧是：<code>systemd-networkd-wait-online.service</code> ，也就是说<code>docker.service</code> 一直在等待这个服务启动，但是这个服务启动失败，最终导致<code>docker.service</code> 无法自启动</p>
 <h2 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h2><p>那么如何解决这个问题呢？</p>
 <p>我上来想到的也是我最开始做的，就是对<code>Wants=network-online.target</code> 这部分进行注释，这样的话可以完美避开，而且测试也ok，曾经一度也是这么做的。</p>
@@ -253,7 +271,10 @@
     <a href="/2019/05/09/gitlab-pages-md/" rel="prev" title="Gitlab Pages 原理解析">
       <i class="fa fa-chevron-left"></i> Gitlab Pages 原理解析
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/08/aliyun-packer-howto/" rel="next" title="阿里云使用Packer创建系统镜像">
+      阿里云使用Packer创建系统镜像 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -329,18 +350,18 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>

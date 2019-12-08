@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://garyjin.com/2019/12/08/aliyun-packer-howto/</loc>
+    
+    <lastmod>2019-12-08T10:37:13.691Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://garyjin.com/2019/12/07/aliyun-docker-systemd-cannot-boot/</loc>
     
-    <lastmod>2019-12-07T08:25:15.113Z</lastmod>
+    <lastmod>2019-12-08T09:10:57.428Z</lastmod>
     
   </url>
   
