@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://garyjin.com/2019/12/15/s3-privilege-explanation/</loc>
+    
+    <lastmod>2019-12-15T14:26:44.153Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://garyjin.com/2019/12/11/aliyun-cli-in-ci/</loc>
     
     <lastmod>2019-12-11T09:27:27.939Z</lastmod>

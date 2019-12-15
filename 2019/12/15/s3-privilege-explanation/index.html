@@ -46,14 +46,18 @@
   };
 </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Gary的Blog">
-<meta property="og:url" content="http:&#x2F;&#x2F;garyjin.com&#x2F;categories&#x2F;Aliyun&#x2F;index.html">
+  <meta name="description" content="aws s3权限管理本文并不是复制粘贴或者是翻译官方文档，而是对s3的使用场景结合官方文档的一些理解，阅读本文之前，一定要仔细阅读官方文档原文，可以大量降低误解、误读。 aws s3的三种权限及使用场景s3 一共三种权限，一种是基于ACL的访问策略、桶策略、用户策略三种，参考文档见于此：https:&#x2F;&#x2F;docs.aws.amazon.com&#x2F;zh_cn&#x2F;AmazonS3&#x2F;latest&#x2F;dev&#x2F;ac">
+<meta name="keywords" content="aws,s3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="aws s3权限管理">
+<meta property="og:url" content="http:&#x2F;&#x2F;garyjin.com&#x2F;2019&#x2F;12&#x2F;15&#x2F;s3-privilege-explanation&#x2F;index.html">
 <meta property="og:site_name" content="Gary的Blog">
+<meta property="og:description" content="aws s3权限管理本文并不是复制粘贴或者是翻译官方文档，而是对s3的使用场景结合官方文档的一些理解，阅读本文之前，一定要仔细阅读官方文档原文，可以大量降低误解、误读。 aws s3的三种权限及使用场景s3 一共三种权限，一种是基于ACL的访问策略、桶策略、用户策略三种，参考文档见于此：https:&#x2F;&#x2F;docs.aws.amazon.com&#x2F;zh_cn&#x2F;AmazonS3&#x2F;latest&#x2F;dev&#x2F;ac">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-15T14:26:44.153Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://garyjin.com/categories/Aliyun/">
+<link rel="canonical" href="http://garyjin.com/2019/12/15/s3-privilege-explanation/">
 
 
 <script id="page-configurations">
@@ -61,11 +65,11 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: false
+    isPost: true
   };
 </script>
 
-  <title>分类: Aliyun | Gary的Blog</title>
+  <title>aws s3权限管理 | Gary的Blog</title>
   
 
 
@@ -170,50 +174,126 @@
           <div class="content">
             
 
+  <div class="posts-expand">
+      
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h1 class="collection-header">Aliyun
-          <small>分类</small>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://garyjin.com/2019/12/15/s3-privilege-explanation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Gary Jin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gary的Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          aws s3权限管理
         </h1>
-      </div>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-15 21:17:01 / 修改时间：22:26:44" itemprop="dateCreated datePublished" datetime="2019-12-15T21:17:01+08:00">2019-12-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/aws/" itemprop="url" rel="index">
+                    <span itemprop="name">aws</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <h1 class="collection-header">2019</h1>
+        <h1 id="aws-s3权限管理"><a href="#aws-s3权限管理" class="headerlink" title="aws s3权限管理"></a>aws s3权限管理</h1><p>本文并不是复制粘贴或者是翻译官方文档，而是对s3的使用场景结合官方文档的一些理解，阅读本文之前，<strong>一定要仔细阅读官方文档原文</strong>，可以大量降低误解、误读。</p>
+<h2 id="aws-s3的三种权限及使用场景"><a href="#aws-s3的三种权限及使用场景" class="headerlink" title="aws s3的三种权限及使用场景"></a>aws s3的三种权限及使用场景</h2><p><code>s3</code> 一共三种权限，一种是<code>基于ACL的访问策略</code>、<code>桶策略</code>、<code>用户策略</code>三种，参考文档见于此：<a href="https://docs.aws.amazon.com/zh_cn/AmazonS3/latest/dev/access-policy-alternatives-guidelines.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/zh_cn/AmazonS3/latest/dev/access-policy-alternatives-guidelines.html</a> </p>
+<a id="more"></a>
+
+<ul>
+<li>基于ACL的访问策略：<ul>
+<li>对象ACL：<ul>
+<li>看过文档后发现，根据文档，当需要对象级别的管理权限时候，应该使用<code>ACL</code> ，怎么理解呢，有个典型使用场景就是<code>s3 sdk</code>上传的时候，用的都是<code>acl</code>，例如使用<code>java sdk</code> 的时候可以使用<code>.withCannedAcl</code>这个方法来设置对象的权限，默认情况下私有对象，当且仅当有显示声明的时候才可以对外公开</li>
+<li>如果想要一个私有对象对外公开，可以考虑使用<code>PutObjectAcl</code> 来修改对象的权限</li>
+</ul>
+</li>
+<li>桶ACL：<ul>
+<li>轻易不要用，按照文档说的，当且仅当使用日志传输组的时候才需要设置就可以了，不需要太关注</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>桶策略<ul>
+<li>常用于跨账户的授权，这就很好理解了，如果想让一个私有桶对外公开，又不想每个对象的权限进行修改，那么直接编写一个桶策略即可，桶策略是典型的<code>IAM Policy</code>，可以对来源使用<code>Principal</code>来限制来源，那么就可以查看<a href="https://docs.aws.amazon.com/zh_cn/IAM/latest/UserGuide/reference_policies_elements_principal.html" target="_blank" rel="noopener">这个文档</a>了，有很多示例可以查看</li>
+</ul>
+</li>
+<li>用户策略<ul>
+<li>这个不用说了，拥有了这个权限的才可以使用<code>s3</code>服务，可以精确到具体的<code>key</code></li>
+</ul>
+</li>
+</ul>
+<p>有了上面这几个浅显的理解，我们可以看下下面的问题：</p>
+<p><strong>为什么我自己账号里面的<code>IAM用户</code>只需要设定用户策略就可以操作<code>s3</code>呢？</strong></p>
+<p>因为当你在创建桶的时候，已经包括了一个默认的可以让同一根账号下面<code>IAM用户</code>对其进行读写的<code>ACL</code> 控制权限</p>
+<p><strong>使用<code>s3</code>静态托管网站的时候，应该如何处理？</strong></p>
+<p>使用<code>s3</code>静态托管网站，需要使用桶策略将对应的对象公开，这个可以是<code>public</code>前缀或者是<code>dist</code>前缀的，这样才能正常对外公开，不然会暴露403错误。而<code>aws</code>在安全方面考虑的也比较周到，不建议直接上传公开对象。</p>
+<p><strong>使用代码上传的<code>s3</code>对象，是否应该用<code>public-read</code>？</strong></p>
+<p>非常不建议，这个问题我之前没有意识到，现在意识到，应该使用<code>桶策略</code>来控制，这样其实安全性会有一个显著的提升的。</p>
+<p>另外有其他问题可以在关于页面找到我的微信，加微信交流</p>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-12-11T15:32:29+08:00"
-              content="2019-12-11">
-          12-11
-        </time>
-      </div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/aws/" rel="tag"># aws</a>
+              <a href="/tags/s3/" rel="tag"># s3</a>
+          </div>
 
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/12/11/aliyun-cli-in-ci/" itemprop="url">
-            <span itemprop="name">在gitlab-ci中使用阿里云cli</span>
-          </a>
-      </h2>
+        
 
-    </header>
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/11/aliyun-cli-in-ci/" rel="prev" title="在gitlab-ci中使用阿里云cli">
+      <i class="fa fa-chevron-left"></i> 在gitlab-ci中使用阿里云cli
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
   </article>
+  
+  
+  
 
-    </div>
   </div>
-  
-  
-  
-
-  
-
 
 
           </div>
@@ -264,6 +344,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#aws-s3权限管理"><span class="nav-number">1.</span> <span class="nav-text">aws s3权限管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#aws-s3的三种权限及使用场景"><span class="nav-number">1.1.</span> <span class="nav-text">aws s3的三种权限及使用场景</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
